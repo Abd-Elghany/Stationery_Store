@@ -28,18 +28,32 @@
         /// </summary>
         private void InitializeComponent()
         {
+            button1 = new Button();
             SuspendLayout();
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.CornflowerBlue;
+            button1.Location = new Point(251, 210);
+            button1.Name = "button1";
+            button1.Size = new Size(189, 56);
+            button1.TabIndex = 0;
+            button1.Text = "Login";
+            button1.UseVisualStyleBackColor = false;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(704, 324);
+            Controls.Add(button1);
             Name = "MainForm";
             Text = "MainForm";
             ResumeLayout(false);
         }
 
         #endregion
+
+        private Button button1;
     }
 }
