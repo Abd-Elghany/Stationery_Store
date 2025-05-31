@@ -30,71 +30,114 @@
         {
             textBox1 = new TextBox();
             label1 = new Label();
-            بيع = new Button();
-            dataGridView1 = new DataGridView();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            searchBtn = new Button();
+            productsGridView = new DataGridView();
+            panel1 = new Panel();
+            panel2 = new Panel();
+            button1 = new Button();
+            ((System.ComponentModel.ISupportInitialize)productsGridView).BeginInit();
+            panel1.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(71, 89);
+            textBox1.Location = new Point(61, 86);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(654, 27);
+            textBox1.Size = new Size(280, 27);
             textBox1.TabIndex = 0;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 25.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(215, 9);
+            label1.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(61, 22);
             label1.Name = "label1";
-            label1.Size = new Size(359, 60);
+            label1.Size = new Size(276, 46);
             label1.TabIndex = 1;
             label1.Text = "ابحث بأسم الصنف";
             // 
-            // بيع
+            // searchBtn
             // 
-            بيع.BackColor = Color.Green;
-            بيع.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            بيع.Location = new Point(230, 359);
-            بيع.Name = "بيع";
-            بيع.Size = new Size(307, 62);
-            بيع.TabIndex = 2;
-            بيع.Text = "بيع";
-            بيع.TextImageRelation = TextImageRelation.ImageAboveText;
-            بيع.UseVisualStyleBackColor = false;
+            searchBtn.BackColor = Color.DarkGray;
+            searchBtn.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            searchBtn.Location = new Point(119, 290);
+            searchBtn.Name = "searchBtn";
+            searchBtn.Size = new Size(165, 41);
+            searchBtn.TabIndex = 2;
+            searchBtn.Text = "بحث";
+            searchBtn.TextImageRelation = TextImageRelation.ImageAboveText;
+            searchBtn.UseVisualStyleBackColor = false;
+            searchBtn.Click += searchBtn_Click;
             // 
-            // dataGridView1
+            // productsGridView
             // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(488, 122);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(300, 188);
-            dataGridView1.TabIndex = 3;
+            productsGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            productsGridView.Location = new Point(3, 6);
+            productsGridView.Name = "productsGridView";
+            productsGridView.RowHeadersWidth = 51;
+            productsGridView.Size = new Size(394, 339);
+            productsGridView.TabIndex = 3;
+            // 
+            // panel1
+            // 
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(textBox1);
+            panel1.Controls.Add(searchBtn);
+            panel1.Location = new Point(1, 6);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(400, 347);
+            panel1.TabIndex = 4;
+            // 
+            // panel2
+            // 
+            panel2.BackColor = SystemColors.GradientActiveCaption;
+            panel2.Controls.Add(productsGridView);
+            panel2.Location = new Point(406, 6);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(397, 348);
+            panel2.TabIndex = 5;
+            // 
+            // button1
+            // 
+            button1.BackColor = Color.Green;
+            button1.Font = new Font("Segoe UI", 13.8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            button1.Location = new Point(623, 372);
+            button1.Name = "button1";
+            button1.Size = new Size(165, 41);
+            button1.TabIndex = 4;
+            button1.Text = "بيع";
+            button1.TextImageRelation = TextImageRelation.ImageAboveText;
+            button1.UseVisualStyleBackColor = false;
             // 
             // SellForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             BackColor = SystemColors.GradientInactiveCaption;
             ClientSize = new Size(800, 450);
-            Controls.Add(dataGridView1);
-            Controls.Add(بيع);
-            Controls.Add(label1);
-            Controls.Add(textBox1);
+            Controls.Add(button1);
+            Controls.Add(panel2);
+            Controls.Add(panel1);
+            IsMdiContainer = true;
             Name = "SellForm";
             Text = "Sell";
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)productsGridView).EndInit();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            panel2.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
 
         private TextBox textBox1;
         private Label label1;
-        private Button بيع;
-        private DataGridView dataGridView1;
+        private Button searchBtn;
+        private DataGridView productsGridView;
+        private Panel panel1;
+        private Panel panel2;
+        private Button button1;
     }
 }
