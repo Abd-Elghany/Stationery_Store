@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Stationery_Store.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,6 +16,18 @@ namespace Stationery_Store.Forms
         public SellForm()
         {
             InitializeComponent();
+        }
+        Context context = new Context();
+        private void searchBtn_Click(object sender, EventArgs e)
+        {
+            string searchTerm = searchBtn.Text.Trim();
+
+            // Search For Products
+            var results = context.Products
+                .Where(p => p.Name.Contains(searchTerm))
+                .ToList();
+
+            productsGridView.DataSource = results;
         }
     }
 }
