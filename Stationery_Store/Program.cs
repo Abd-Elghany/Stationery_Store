@@ -14,9 +14,13 @@ namespace Stationery_Store
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
             Application.Run(new SellForm());
             //SellForm
             //MainForm
+=======
+            Application.Run(new Forms.CategoryForm());
+>>>>>>> Stashed changes
 =======
             Application.Run(new Forms.CategoryForm());
 >>>>>>> Stashed changes
