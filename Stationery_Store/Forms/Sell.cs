@@ -20,7 +20,12 @@ namespace Stationery_Store.Forms
         Context context = new Context();
         private void searchBtn_Click(object sender, EventArgs e)
         {
-            string searchTerm = searchBtn.Text.Trim();
+           
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            string searchTerm = SearchTextBox.Text.Trim();
 
             // Search For Products
             var results = context.Products

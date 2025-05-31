@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            textBox1 = new TextBox();
+            SearchTextBox = new TextBox();
             label1 = new Label();
             searchBtn = new Button();
             productsGridView = new DataGridView();
@@ -40,12 +40,13 @@
             panel2.SuspendLayout();
             SuspendLayout();
             // 
-            // textBox1
+            // SearchTextBox
             // 
-            textBox1.Location = new Point(61, 86);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(280, 27);
-            textBox1.TabIndex = 0;
+            SearchTextBox.Location = new Point(61, 86);
+            SearchTextBox.Name = "SearchTextBox";
+            SearchTextBox.Size = new Size(280, 27);
+            SearchTextBox.TabIndex = 0;
+            SearchTextBox.TextChanged += textBox1_TextChanged;
             // 
             // label1
             // 
@@ -82,7 +83,7 @@
             // panel1
             // 
             panel1.Controls.Add(label1);
-            panel1.Controls.Add(textBox1);
+            panel1.Controls.Add(SearchTextBox);
             panel1.Controls.Add(searchBtn);
             panel1.Location = new Point(1, 6);
             panel1.Name = "panel1";
@@ -132,7 +133,7 @@
 
         #endregion
 
-        private TextBox textBox1;
+        private TextBox SearchTextBox;
         private Label label1;
         private Button searchBtn;
         private DataGridView productsGridView;
