@@ -18,7 +18,7 @@ namespace Stationery_Store.Entities
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlite("Data Source=Data\\appdata.db");
+            optionsBuilder.UseSqlite("Data Source=C:\\Users\\ahkhn\\Documents\\Git Repos\\Stationery_Store\\Stationery_Store\\Data\\appdata.db");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

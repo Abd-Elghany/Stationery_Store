@@ -6,5 +6,10 @@ namespace Stationery_Store
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

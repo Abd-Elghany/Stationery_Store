@@ -13,9 +13,13 @@ namespace Stationery_Store
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+<<<<<<< Updated upstream
             Application.Run(new SellForm());
             //SellForm
             //MainForm
+=======
+            Application.Run(new Forms.CategoryForm());
+>>>>>>> Stashed changes
         }
     }
 }
