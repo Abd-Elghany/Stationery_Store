@@ -12,24 +12,37 @@ namespace Stationery_Store.Forms
     {
         private Context context = new Context();
 
-        // قائمة المنتجات التي أضافها المستخدم للبيع (السلة)
+        // List of selected products to sell (cart)
         private List<Product> selectedProducts = new List<Product>();
 
         public SellForm()
         {
             InitializeComponent();
 
-            // تعطيل توليد الأعمدة التلقائي لجداول البيانات
+            // Disable auto-generating columns for the product grid
             productsGridView.AutoGenerateColumns = false;
 
             ConfigureProductGrid();
             ConfigureSellGrid();
             SellGridView.CellValueChanged += SellGridView_CellValueChanged;
             SellGridView.EditingControlShowing += SellGridView_EditingControlShowing;
+
+            // Show all products initially
+            productsGridView.DataSource = context.Products.Take(50).ToList();
+
+            //Delete product from sell GridView
+
+            Button RemoveBtn = new Button();
+            RemoveBtn.Text = "حذف المنتج";
+            RemoveBtn.Location = new Point(10, 400); // غير الإحداثيات حسب تصميمك
+            RemoveBtn.Click += RemoveBtn_Click_1;
+            this.Controls.Add(RemoveBtn);
+
         }
 
         /// <summary>
-        /// دالة البحث عن المنتجات عند كتابة نص في مربع البحث
+        /// This event triggers when the user types in the search box.
+        /// It searches for products containing the typed name and shows them in the product grid.
         /// </summary>
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
@@ -37,11 +50,10 @@ namespace Stationery_Store.Forms
 
             if (string.IsNullOrEmpty(searchTerm))
             {
-                productsGridView.DataSource = null;
+                productsGridView.DataSource = context.Products.Take(50).ToList();
                 return;
             }
 
-            // البحث في قاعدة البيانات عن المنتجات التي تحتوي أسمها على نص البحث
             var results = context.Products
                 .Where(p => p.Name.Contains(searchTerm))
                 .Take(50)
@@ -51,7 +63,7 @@ namespace Stationery_Store.Forms
         }
 
         /// <summary>
-        /// دالة إضافة المنتج المختار من قائمة المنتجات إلى قائمة البيع
+        /// This button adds the selected product from the product grid to the sell grid (cart).
         /// </summary>
         private void AddBtn_Click(object sender, EventArgs e)
         {
@@ -71,9 +83,14 @@ namespace Stationery_Store.Forms
 
             selectedProducts.Add(selectedProduct);
 
+            if (selectedProducts.Count < 1)
+            {
+                MessageBox.Show("السلة فارغة");
+                return;
+            }
+
             var price = selectedProduct.Price;
 
-            // إضافة الصف مع الـ ID مخفي
             int rowIndex = SellGridView.Rows.Add();
             var row = SellGridView.Rows[rowIndex];
             row.Cells["SellProductId"].Value = selectedProduct.ID;
@@ -82,9 +99,8 @@ namespace Stationery_Store.Forms
             row.Cells["SellPrice"].Value = price;
         }
 
-
         /// <summary>
-        /// دالة تنفيذ عملية البيع عند الضغط على زر البيع
+        /// This button finalizes the sale process and saves the order to the database.
         /// </summary>
         private void SellBtn_Click(object sender, EventArgs e)
         {
@@ -95,44 +111,42 @@ namespace Stationery_Store.Forms
             }
 
             bool hasError = false;
+            decimal totalPrice = 0;
+            int totalQuantity = 0;
+
+            Order order = new Order
+            {
+                Date = DateTime.Now,
+                OrderItems = new List<OrderItem>()
+            };
 
             for (int i = 0; i < SellGridView.Rows.Count; i++)
             {
                 var row = SellGridView.Rows[i];
-
                 string productName = row.Cells["SellProductName"].Value?.ToString();
 
-                //if (row.Cells["SellProductId"].Value == null || string.IsNullOrWhiteSpace(row.Cells["SellProductId"].Value.ToString()))
-                //{
-                //    MessageBox.Show("رقم المنتج غير موجود. تأكد من إدخال البيانات بشكل صحيح.");
-                //    hasError = true;
-                //    continue;
-                //}
+                if (!int.TryParse(row.Cells["SellProductId"].Value?.ToString(), out int productId))
+                {
+                    MessageBox.Show($"رقم المنتج غير صالح: {productName}");
+                    hasError = true;
+                    continue;
+                }
 
-                int productId = int.Parse(row.Cells["SellProductId"].Value.ToString());
-                Console.WriteLine("productName ==> "+ productName);
-                int quantity;
-                decimal price;
-
-                // التأكد من صحة الكمية المدخلة
-                if (!int.TryParse(row.Cells["SellQuantity"].Value?.ToString(), out quantity) || quantity <= 0)
+                if (!int.TryParse(row.Cells["SellQuantity"].Value?.ToString(), out int quantity) || quantity <= 0)
                 {
                     MessageBox.Show($"برجاء إدخال كمية صحيحة للمنتج: {productName}");
                     hasError = true;
                     continue;
                 }
 
-                // التأكد من صحة السعر المدخل (يمكن أن يكون عشري)
-                if (!decimal.TryParse(row.Cells["SellPrice"].Value?.ToString(), out price) || price <= 0)
+                if (!decimal.TryParse(row.Cells["SellPrice"].Value?.ToString(), out decimal price) || price <= 0)
                 {
                     MessageBox.Show($"برجاء إدخال سعر صحيح للمنتج: {productName}");
                     hasError = true;
                     continue;
                 }
 
-                // إيجاد المنتج في قاعدة البيانات باستخدام الاسم (الأفضل استخدام ID لو متوفر)
                 var product = context.Products.FirstOrDefault(p => p.ID == productId);
-
                 if (product == null)
                 {
                     MessageBox.Show($"المنتج غير موجود في قاعدة البيانات: {productName}");
@@ -140,7 +154,6 @@ namespace Stationery_Store.Forms
                     continue;
                 }
 
-                // التحقق من توفر الكمية المطلوبة
                 if (quantity > product.Quantity)
                 {
                     MessageBox.Show($"الكمية المطلوبة غير متاحة للمنتج: {productName}");
@@ -148,30 +161,43 @@ namespace Stationery_Store.Forms
                     continue;
                 }
 
-                // تحديث الكمية المتبقية في قاعدة البيانات
                 product.Quantity -= quantity;
 
-                // يمكن هنا إضافة سجل بيع أو فاتورة حسب نظامك
-                // كود إضافي لمعالجة البيع يمكن إضافته هنا
+                OrderItem orderItem = new OrderItem
+                {
+                    ProductId = productId,
+                    Quantity = quantity,
+                    UnitPrice = (double)price,
+                    Product = product,
+                    Order = order
+                };
+
+                order.OrderItems.Add(orderItem);
+
+                totalPrice += price * quantity;
+                totalQuantity += quantity;
             }
 
-            if (!hasError)
+            if (hasError)
             {
-                context.SaveChanges();
-                MessageBox.Show("تمت عملية البيع بنجاح");
-
-                // إعادة تهيئة الحقول بعد البيع
-                selectedProducts.Clear();
-                SellGridView.Rows.Clear();
-                SearchTextBox.Clear();
-                productsGridView.DataSource = null;
+                return;
             }
+
+            order.TotalAmount = totalQuantity;
+            order.TotalPrice = (double)totalPrice;
+
+            context.Orders.Add(order);
+            context.SaveChanges();
+
+            MessageBox.Show("تمت عملية البيع بنجاح");
+            selectedProducts.Clear();
+            SellGridView.Rows.Clear();
+            SearchTextBox.Clear();
+            productsGridView.DataSource = context.Products.Take(50).ToList();
             UpdateTotalPrice();
+            UpdateTotalQuantity();
         }
 
-        /// <summary>
-        /// تهيئة أعمدة جدول المنتجات (productsGridView)
-        /// </summary>
         private void ConfigureProductGrid()
         {
             productsGridView.Columns.Clear();
@@ -179,40 +205,40 @@ namespace Stationery_Store.Forms
             productsGridView.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "الاسم",
-                DataPropertyName = "Name"
+                DataPropertyName = "Name",
+                ReadOnly = true
             });
 
             productsGridView.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "الوصف",
-                DataPropertyName = "Description"
+                DataPropertyName = "Description",
+                ReadOnly = true
             });
 
             productsGridView.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "السعر",
-                DataPropertyName = "Price"
+                DataPropertyName = "Price",
+                ReadOnly = true
             });
 
             productsGridView.Columns.Add(new DataGridViewTextBoxColumn
             {
                 HeaderText = "الكمية المتاحة",
-                DataPropertyName = "Quantity"
+                DataPropertyName = "Quantity",
+                ReadOnly = true,
             });
         }
 
-        /// <summary>
-        /// تهيئة أعمدة جدول البيع (SellGridView) مع السماح بتعديل العمودين "الكمية" و"السعر"
-        /// </summary>
         private void ConfigureSellGrid()
         {
             SellGridView.Columns.Clear();
 
-            // عمود الـ ID (مخفي)
             SellGridView.Columns.Add(new DataGridViewTextBoxColumn
             {
                 Name = "SellProductId",
-                Visible = false // نخفي العمود عشان ما يظهرش للمستخدم
+                Visible = false
             });
 
             SellGridView.Columns.Add(new DataGridViewTextBoxColumn
@@ -237,20 +263,13 @@ namespace Stationery_Store.Forms
             });
         }
 
-
-        // يمكنك هنا إضافة أحداث مثل التحقق من المدخلات أثناء تحرير الخلايا لو حبيت
-
-
-
-        //Total Salary
-
         private void UpdateTotalPrice()
         {
             decimal total = 0;
 
             foreach (DataGridViewRow row in SellGridView.Rows)
             {
-                if (row.IsNewRow) continue; // تجاهل صف الإدخال الجديد
+                if (row.IsNewRow) continue;
 
                 if (decimal.TryParse(row.Cells["SellPrice"].Value?.ToString(), out decimal price) &&
                     int.TryParse(row.Cells["SellQuantity"].Value?.ToString(), out int quantity))
@@ -259,18 +278,36 @@ namespace Stationery_Store.Forms
                 }
             }
 
-            TotalLabel.Text = $"الإجمالي: {total} جنيه";
+            TotalPrice.Text = $"الإجمالي: {total} جنيه";
+        }
+
+        private void UpdateTotalQuantity()
+        {
+            decimal total = 0;
+
+            foreach (DataGridViewRow row in SellGridView.Rows)
+            {
+                if (row.IsNewRow) continue;
+
+                if (int.TryParse(row.Cells["SellQuantity"].Value?.ToString(), out int quantity))
+                {
+                    total += quantity;
+                }
+            }
+
+            TotalQuantity.Text = $"الكمية: {total} ";
         }
 
         private void SellGridView_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
-            e.Control.TextChanged -= CellTextChanged; // مهم جدًا عشان ميكررش الحدث
+            e.Control.TextChanged -= CellTextChanged;
             e.Control.TextChanged += CellTextChanged;
         }
 
         private void CellTextChanged(object sender, EventArgs e)
         {
             UpdateTotalPrice();
+            UpdateTotalQuantity();
         }
 
         private void SellGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
@@ -280,12 +317,31 @@ namespace Stationery_Store.Forms
                  SellGridView.Columns[e.ColumnIndex].Name == "SellPrice"))
             {
                 UpdateTotalPrice();
+                UpdateTotalQuantity();
             }
         }
 
+        private void RemoveBtn_Click_1(object sender, EventArgs e)
+        {
+            if (SellGridView.CurrentRow == null || SellGridView.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show("من فضلك اختر صفًا لحذفه");
+                return;
+            }
 
+            var productId = SellGridView.CurrentRow.Cells["SellProductId"].Value;
+            if (productId != null)
+            {
+                // إحذف المنتج من قائمة المنتجات المحددة
+                selectedProducts.RemoveAll(p => p.ID.ToString() == productId.ToString());
+            }
 
+            // إحذف الصف من الجريد
+            SellGridView.Rows.Remove(SellGridView.CurrentRow);
 
-
+            // حدّث الإجمالي
+            UpdateTotalPrice();
+            UpdateTotalQuantity();
+        }
     }
 }
