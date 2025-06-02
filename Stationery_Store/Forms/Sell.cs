@@ -196,6 +196,9 @@ namespace Stationery_Store.Forms
             productsGridView.DataSource = context.Products.Take(50).ToList();
             UpdateTotalPrice();
             UpdateTotalQuantity();
+            InvoiceForm invoiceForm = new InvoiceForm(order);
+            invoiceForm.Show();
+
         }
 
         private void ConfigureProductGrid()
