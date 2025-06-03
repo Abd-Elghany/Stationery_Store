@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace Stationery_Store.Forms
 {
-    public partial class SellForm : Form
+    public partial class Sell : Form
     {
-        public SellForm()
+        public Sell()
         {
             InitializeComponent();
         }

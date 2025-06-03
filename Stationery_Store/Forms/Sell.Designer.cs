@@ -1,6 +1,6 @@
 ﻿namespace Stationery_Store.Forms
 {
-    partial class SellForm
+    partial class Sell
     {
         /// <summary>
         /// Required designer variable.

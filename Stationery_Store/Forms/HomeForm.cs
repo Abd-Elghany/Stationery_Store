@@ -13,7 +13,7 @@ namespace Stationery_Store.Forms
     public partial class HomeForm : Form
     {
         CategoryForm categoryForm;
-        SellForm sellForm;
+        Sell sellForm;
 
         
         private Form lastActiveChild;
@@ -93,7 +93,7 @@ namespace Stationery_Store.Forms
         {
             if (sellForm == null)
             {
-                sellForm = new SellForm();
+                sellForm = new Sell();
                 sellForm.FormClosed += sellForm_FormClosed;
                 sellForm.MdiParent = this;
                 sellForm.FormBorderStyle = FormBorderStyle.None;  // Remove borders
