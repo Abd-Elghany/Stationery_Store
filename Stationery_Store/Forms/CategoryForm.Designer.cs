@@ -178,6 +178,7 @@
             Controls.Add(label1);
             Name = "CategoryForm";
             Text = "Form1";
+            Load += CategoryForm_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)categoryBindingSource).EndInit();
             ResumeLayout(false);

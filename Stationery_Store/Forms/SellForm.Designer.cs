@@ -121,7 +121,6 @@
             Controls.Add(button1);
             Controls.Add(panel2);
             Controls.Add(panel1);
-            IsMdiContainer = true;
             Name = "SellForm";
             Text = "Sell";
             ((System.ComponentModel.ISupportInitialize)productsGridView).EndInit();
