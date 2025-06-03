@@ -1,6 +1,6 @@
 ﻿namespace Stationery_Store.Forms
 {
-    partial class Sell
+    partial class SellForm
     {
         private System.ComponentModel.IContainer components = null;
 

@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace Stationery_Store.Forms
 {
-    public partial class Sell : Form
+    public partial class SellForm : Form
     {
 
         private Context context = new Context();
