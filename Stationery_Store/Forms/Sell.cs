@@ -8,8 +8,9 @@ using System.Windows.Forms;
 
 namespace Stationery_Store.Forms
 {
-    public partial class SellForm : Form
+    public partial class Sell : Form
     {
+
         private Context context = new Context();
 
         // List of selected products to sell (cart)
