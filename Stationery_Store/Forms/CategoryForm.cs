@@ -76,6 +76,8 @@ namespace Stationery_Store.Forms
             dbContext.SaveChanges();
             LoadCategories();
             SetStatus("تمت إضافة الصنف بنجاح", Color.Green);
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void UpdateCategoryBtn_Click(object sender, EventArgs e)
