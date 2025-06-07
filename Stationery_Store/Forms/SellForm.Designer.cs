@@ -172,7 +172,6 @@
             BackColor = SystemColors.GradientInactiveCaption;
             ClientSize = new Size(1070, 532);
             Controls.Add(panel1);
-            IsMdiContainer = true;
             Name = "SellForm";
             SizeGripStyle = SizeGripStyle.Show;
             StartPosition = FormStartPosition.CenterScreen;

@@ -14,7 +14,7 @@ namespace Stationery_Store
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 //<<<<<<< HEAD
-            Application.Run(new ProductsForm());
+            Application.Run(new HomeForm());
             //CategoryForm
             //SellForm
         }
