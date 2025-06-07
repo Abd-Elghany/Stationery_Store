@@ -1,3 +1,5 @@
+using Stationery_Store.Forms;
+
 namespace Stationery_Store
 {
     internal static class Program
@@ -11,7 +13,10 @@ namespace Stationery_Store
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new MainForm());
+//<<<<<<< HEAD
+            Application.Run(new ProductsForm());
+            //CategoryForm
+            //SellForm
         }
     }
 }

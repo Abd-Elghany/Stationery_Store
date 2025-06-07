@@ -8,18 +8,21 @@ using System.Threading.Tasks;
 
 namespace Stationery_Store.Entities
 {
-    public class Product
+    public class OrderItem
     {
         [Key]
         public int ID { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public double Price { get; set; }
-        public int Quantity { get; set; }
 
-        [ForeignKey("Category")]
-        public int CategoryId { get; set; }
-        public virtual Category Category { get; set; }
-        public virtual ICollection<OrderItem> OrderItems { get; set; }
+        public int Quantity { get; set; }
+        public double UnitPrice { get; set; }
+
+        [ForeignKey("Product")]
+        public int ProductId { get; set; }
+        public virtual Product Product { get; set; }
+
+        [ForeignKey("Order")]
+        public int OrderId { get; set; }
+        public virtual Order Order { get; set; }
     }
+
 }
