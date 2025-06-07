@@ -11,8 +11,8 @@ using Stationery_Store.Entities;
 namespace Stationery_Store.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20250531131826_init_DB")]
-    partial class init_DB
+    [Migration("20250528181340_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,20 +37,6 @@ namespace Stationery_Store.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            Description = "أقلام جامدة اوي",
-                            Name = "أقلام"
-                        },
-                        new
-                        {
-                            ID = 2,
-                            Description = "كشاكشيل جامدة اوي",
-                            Name = "كشاكيل"
-                        });
                 });
 
             modelBuilder.Entity("Stationery_Store.Entities.Order", b =>
@@ -59,13 +45,13 @@ namespace Stationery_Store.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateOnly>("Date")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TotalAmount")
+                    b.Property<int>("Total_Amount")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("TotalPrice")
+                    b.Property<double>("Total_Price")
                         .HasColumnType("REAL");
 
                     b.HasKey("ID");
@@ -73,29 +59,35 @@ namespace Stationery_Store.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("Stationery_Store.Entities.OrderItem", b =>
+            modelBuilder.Entity("Stationery_Store.Entities.Order_Item", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("OrderId")
+                    b.Property<int>("OrderID")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("Order_ID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProductID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Product_ID")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<double>("UnitPrice")
+                    b.Property<double>("Unit_Price")
                         .HasColumnType("REAL");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderID");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductID");
 
                     b.ToTable("Order_Items");
                 });
@@ -106,7 +98,10 @@ namespace Stationery_Store.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("CategoryID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Category_ID")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -125,29 +120,9 @@ namespace Stationery_Store.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryID");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            CategoryId = 1,
-                            Description = "قلم رصاص جامد جدا",
-                            Name = "قلم رصاص",
-                            Price = 10.0,
-                            Quantity = 100
-                        },
-                        new
-                        {
-                            ID = 2,
-                            CategoryId = 2,
-                            Description = "كراسة مربعات 80 ص",
-                            Name = "كراسة",
-                            Price = 15.0,
-                            Quantity = 120
-                        });
                 });
 
             modelBuilder.Entity("Stationery_Store.Entities.User", b =>
@@ -156,7 +131,7 @@ namespace Stationery_Store.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("NationalID")
+                    b.Property<string>("National_ID")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -168,7 +143,7 @@ namespace Stationery_Store.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("User_Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -177,17 +152,17 @@ namespace Stationery_Store.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Stationery_Store.Entities.OrderItem", b =>
+            modelBuilder.Entity("Stationery_Store.Entities.Order_Item", b =>
                 {
                     b.HasOne("Stationery_Store.Entities.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
+                        .WithMany()
+                        .HasForeignKey("OrderID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Stationery_Store.Entities.Product", "Product")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductId")
+                        .WithMany()
+                        .HasForeignKey("ProductID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -199,27 +174,12 @@ namespace Stationery_Store.Migrations
             modelBuilder.Entity("Stationery_Store.Entities.Product", b =>
                 {
                     b.HasOne("Stationery_Store.Entities.Category", "Category")
-                        .WithMany("Products")
-                        .HasForeignKey("CategoryId")
+                        .WithMany()
+                        .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("Stationery_Store.Entities.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("Stationery_Store.Entities.Order", b =>
-                {
-                    b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("Stationery_Store.Entities.Product", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 #pragma warning restore 612, 618
         }
