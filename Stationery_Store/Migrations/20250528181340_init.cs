@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Stationery_Store.Migrations
 {
     /// <inheritdoc />
-    public partial class init_DB : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -33,9 +31,9 @@ namespace Stationery_Store.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Date = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    TotalAmount = table.Column<int>(type: "INTEGER", nullable: false),
-                    TotalPrice = table.Column<double>(type: "REAL", nullable: false)
+                    Date = table.Column<DateOnly>(type: "TEXT", nullable: false),
+                    Total_Amount = table.Column<int>(type: "INTEGER", nullable: false),
+                    Total_Price = table.Column<double>(type: "REAL", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -48,9 +46,9 @@ namespace Stationery_Store.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UserName = table.Column<string>(type: "TEXT", nullable: false),
+                    User_Name = table.Column<string>(type: "TEXT", nullable: false),
                     Password = table.Column<string>(type: "TEXT", nullable: false),
-                    NationalID = table.Column<string>(type: "TEXT", nullable: false),
+                    National_ID = table.Column<string>(type: "TEXT", nullable: false),
                     Phone = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -68,14 +66,15 @@ namespace Stationery_Store.Migrations
                     Description = table.Column<string>(type: "TEXT", nullable: false),
                     Price = table.Column<double>(type: "REAL", nullable: false),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Category_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CategoryID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Products_Categories_CategoryID",
+                        column: x => x.CategoryID,
                         principalTable: "Categories",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
@@ -88,59 +87,43 @@ namespace Stationery_Store.Migrations
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Quantity = table.Column<int>(type: "INTEGER", nullable: false),
-                    UnitPrice = table.Column<double>(type: "REAL", nullable: false),
-                    ProductId = table.Column<int>(type: "INTEGER", nullable: false),
-                    OrderId = table.Column<int>(type: "INTEGER", nullable: false)
+                    Unit_Price = table.Column<double>(type: "REAL", nullable: false),
+                    Order_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    OrderID = table.Column<int>(type: "INTEGER", nullable: false),
+                    Product_ID = table.Column<int>(type: "INTEGER", nullable: false),
+                    ProductID = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order_Items", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Order_Items_Orders_OrderId",
-                        column: x => x.OrderId,
+                        name: "FK_Order_Items_Orders_OrderID",
+                        column: x => x.OrderID,
                         principalTable: "Orders",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Order_Items_Products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_Order_Items_Products_ProductID",
+                        column: x => x.ProductID,
                         principalTable: "Products",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "ID", "Description", "Name" },
-                values: new object[,]
-                {
-                    { 1, "أقلام جامدة اوي", "أقلام" },
-                    { 2, "كشاكشيل جامدة اوي", "كشاكيل" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "ID", "CategoryId", "Description", "Name", "Price", "Quantity" },
-                values: new object[,]
-                {
-                    { 1, 1, "قلم رصاص جامد جدا", "قلم رصاص", 10.0, 100 },
-                    { 2, 2, "كراسة مربعات 80 ص", "كراسة", 15.0, 120 }
-                });
-
             migrationBuilder.CreateIndex(
-                name: "IX_Order_Items_OrderId",
+                name: "IX_Order_Items_OrderID",
                 table: "Order_Items",
-                column: "OrderId");
+                column: "OrderID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_Items_ProductId",
+                name: "IX_Order_Items_ProductID",
                 table: "Order_Items",
-                column: "ProductId");
+                column: "ProductID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CategoryId",
+                name: "IX_Products_CategoryID",
                 table: "Products",
-                column: "CategoryId");
+                column: "CategoryID");
         }
 
         /// <inheritdoc />
