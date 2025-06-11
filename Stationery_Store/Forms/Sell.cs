@@ -18,6 +18,7 @@ namespace Stationery_Store.Forms
         public SellForm()
         {
             InitializeComponent();
+            panel1.Size = this.Size;
 
             // Disable auto-generating columns for the product grid
             productsGridView.AutoGenerateColumns = false;
@@ -166,6 +167,7 @@ namespace Stationery_Store.Forms
                 OrderItem orderItem = new OrderItem
                 {
                     ProductId = productId,
+                    ProductName = product.Name, // 👈 خزّن اسم المنتج هنا
                     Quantity = quantity,
                     UnitPrice = (double)price,
                     Product = product,
@@ -345,6 +347,11 @@ namespace Stationery_Store.Forms
             // حدّث الإجمالي
             UpdateTotalPrice();
             UpdateTotalQuantity();
+        }
+
+        private void SellForm_Load(object sender, EventArgs e)
+        {
+            this.ControlBox = false;
         }
     }
 }

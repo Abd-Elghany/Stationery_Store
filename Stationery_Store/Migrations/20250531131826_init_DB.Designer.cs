@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Stationery_Store.Entities;
 
@@ -10,9 +11,11 @@ using Stationery_Store.Entities;
 namespace Stationery_Store.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250531131826_init_DB")]
+    partial class init_DB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
@@ -79,12 +82,8 @@ namespace Stationery_Store.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("ProductName")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
@@ -159,12 +158,10 @@ namespace Stationery_Store.Migrations
 
                     b.Property<string>("NationalID")
                         .IsRequired()
-                        .HasMaxLength(14)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Phone")
@@ -173,38 +170,11 @@ namespace Stationery_Store.Migrations
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("UserRole")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("UserName")
-                        .IsUnique();
-
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            ID = 1,
-                            NationalID = "12345678912345",
-                            Password = "123456",
-                            Phone = "01061748098",
-                            UserName = "Ahmed",
-                            UserRole = 0
-                        },
-                        new
-                        {
-                            ID = 2,
-                            NationalID = "12345678912345",
-                            Password = "123456",
-                            Phone = "01061748098",
-                            UserName = "Khaled",
-                            UserRole = 1
-                        });
                 });
 
             modelBuilder.Entity("Stationery_Store.Entities.OrderItem", b =>
@@ -218,7 +188,8 @@ namespace Stationery_Store.Migrations
                     b.HasOne("Stationery_Store.Entities.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Order");
 
@@ -230,7 +201,7 @@ namespace Stationery_Store.Migrations
                     b.HasOne("Stationery_Store.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Category");
